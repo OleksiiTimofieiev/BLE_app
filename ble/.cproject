@@ -196,14 +196,14 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="platform|protocol|hardware|app|gatt.xml|gatt_db.h|gatt_db.c|BgBuild_Log.txt|create_bl_files.sh|hal-config-app-common.h|hal-config-board.h|ble-configuration.h|init_mcu.c|init_app.c|init_board.c|uartdrv_config.h|main.c|tempdrv_config.h|init_app.h|dmadrv_config.h|board_features.h|init_mcu.h|hal-config.h|application_properties.c|init_board.h|efr32bg1b232f256gm48.ld" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="platform|protocol|hardware|app|gatt.xml|gatt_db.h|gatt_db.c|BgBuild_Log.txt|init_app.c|create_bl_files.sh|hal-config-app-common.h|init_board.c|ble-configuration.h|hal-config-board.h|init_mcu.c|uartdrv_config.h|main.c|tempdrv_config.h|init_app.h|dmadrv_config.h|board_features.h|init_mcu.h|hal-config.h|application_properties.c|init_board.h|efr32bg1b232f256gm48.ld" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 	</storageModule>
-	<storageModule generalProj.esf.protocolIds="com.silabs.sdk.stack.super:2.3.1._1914562650.com.silabs.stack.ble:2.9.2.0_1646956538" generalProj.esf.protocolNames="ble" moduleId="com.silabs.ss.framework.ide.project.core.cpp" project.generation="21" projectCommon.boardIds="com.silabs.board.none:0.0.0" projectCommon.partId="mcu.arm.efr32.bg1.efr32bg1b232f256gm48" projectCommon.sdkId="com.silabs.sdk.stack.super:2.3.1._1914562650"/>
+	<storageModule generalProj.esf.protocolIds="com.silabs.sdk.stack.super:2.3.1._1914562650.com.silabs.stack.ble:2.9.2.0_1646956538" generalProj.esf.protocolNames="ble" moduleId="com.silabs.ss.framework.ide.project.core.cpp" project.generation="25" projectCommon.boardIds="com.silabs.board.none:0.0.0" projectCommon.partId="mcu.arm.efr32.bg1.efr32bg1b232f256gm48" projectCommon.sdkId="com.silabs.sdk.stack.super:2.3.1._1914562650"/>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="ble.com.silabs.ss.framework.ide.project.core.cdt.cdtMbsProjectType.65819550" name="SLS CDT Project" projectType="com.silabs.ss.framework.ide.project.core.cdt.cdtMbsProjectType"/>
 	</storageModule>
@@ -217,4 +217,5 @@
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="refreshScope"/>
 </cproject>

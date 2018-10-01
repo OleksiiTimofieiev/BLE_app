@@ -77,6 +77,9 @@ uint8_t boot_to_dfu = 0;
 /**
  * @brief  Main function
  */
+
+void	connect_to_device(void);
+
 void main(void)
 {
   // Initialize device
@@ -88,6 +91,8 @@ void main(void)
 
   // Initialize stack
   gecko_init(&config);
+
+  int connection_status = 0;
 
   while (1) {
     /* Event pointer for handling events */
@@ -102,20 +107,28 @@ void main(void)
        * Do not call any stack commands before receiving the boot event.
        * Here the system is set to start advertising immediately after boot procedure. */
       case gecko_evt_system_boot_id:
-
+      {
         /* Set advertising parameters. 100ms advertisement interval.
          * The first parameter is advertising set handle
          * The next two parameters are minimum and maximum advertising interval, both in
          * units of (milliseconds * 1.6).
          * The last two parameters are duration and maxevents left as default. */
         gecko_cmd_le_gap_set_advertise_timing(0, 160, 160, 0, 0);
-
         /* Start general advertising and enable connections. */
         gecko_cmd_le_gap_start_advertising(0, le_gap_general_discoverable, le_gap_connectable_scannable);
+        /* Connect to a specific MAC address every 5 seconds */
+        if(connection_status == 0)
+        	connect_to_device();
+        if(connection_status == 0) // check this idea
+        	gecko_cmd_hardware_set_soft_timer(32768, 0, 0);
         break;
-
+      }
+      case gecko_evt_le_connection_opened_id: // check the establishment of the connection;
+//    	  tmp = evt->data.evt_le_connection_opened.connection;
+    	  connection_status = 1;
+    	  break ;
       case gecko_evt_le_connection_closed_id:
-
+    	  connection_status = 0;
         /* Check if need to boot to dfu mode */
         if (boot_to_dfu) {
           /* Enter to DFU OTA mode */
@@ -132,7 +145,6 @@ void main(void)
       /* Check if the user-type OTA Control Characteristic was written.
        * If ota_control was written, boot the device into Device Firmware Upgrade (DFU) mode. */
       case gecko_evt_gatt_server_user_write_request_id:
-
         if (evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_ota_control) {
           /* Set flag to enter to OTA mode */
           boot_to_dfu = 1;
@@ -146,7 +158,10 @@ void main(void)
           gecko_cmd_le_connection_close(evt->data.evt_gatt_server_user_write_request.connection);
         }
         break;
-
+      case gecko_evt_hardware_soft_timer_id:
+    	  if (connection_status == 0)
+    		  connect_to_device();
+    	  break;
       default:
         break;
     }
@@ -155,3 +170,17 @@ void main(void)
 
 /** @} (end addtogroup app) */
 /** @} (end addtogroup Application) */
+
+void	connect_to_device(void)
+{
+	bd_addr mac_address;
+
+	mac_address.addr[0] = 0x00; // 00:0B:57:35:C0:BF;
+	mac_address.addr[1] = 0x0B;
+	mac_address.addr[2] = 0x57;
+	mac_address.addr[3] = 0x35;
+	mac_address.addr[4] = 0xC0;
+	mac_address.addr[5] = 0xBF;
+
+	gecko_cmd_le_gap_connect(mac_address, le_gap_address_type_public, 1);
+}
