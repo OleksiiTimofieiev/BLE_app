@@ -38,7 +38,7 @@ int    main(void)
 		switch (BGLIB_MSG_ID(evt->header)) {
 			// This boot event is generated when the system boots up after reset
 			case gecko_evt_system_boot_id:
-				boot_handler(&connState, mac_address, &evt);
+				boot_handler(&connState, mac_address, evt, activeConnectionsNum);
 				break;
 
 			// This event is generated when an advertisement packet or a scan response

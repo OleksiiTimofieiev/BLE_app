@@ -1,6 +1,6 @@
 #include "./mandatory_includes.h"
 
-void	boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_packet	*evt)
+void	boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_packet	*evt, uint8_t activeConnectionsNum)
 {
 	// printf("\r\nBLE Central started\r\n");
 	// Set passive scanning on 1Mb PHY

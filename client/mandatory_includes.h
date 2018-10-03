@@ -122,4 +122,6 @@ uint8_t		findIndexByConnectionHandle(uint8_t connection, uint8_t activeConnectio
 void		addConnection(uint8_t connection, uint16_t address, ConnProperties *connProperties, uint8_t *activeConnectionsNum);
 void		removeConnection(uint8_t connection, uint8_t *activeConnectionsNum, ConnProperties *connProperties);
 
+void	boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_packet	*evt, uint8_t activeConnectionsNum);
+
 #endif /* MANDATORY_INCLUDES_H_ */
