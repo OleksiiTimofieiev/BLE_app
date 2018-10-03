@@ -122,7 +122,9 @@ uint8_t		findIndexByConnectionHandle(uint8_t connection, uint8_t activeConnectio
 void		addConnection(uint8_t connection, uint16_t address, ConnProperties *connProperties, uint8_t *activeConnectionsNum);
 void		removeConnection(uint8_t connection, uint8_t *activeConnectionsNum, ConnProperties *connProperties);
 
-void	boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_packet	*evt, uint8_t activeConnectionsNum);
-void	connection_open_handler(ConnState *connState,  struct gecko_cmd_packet	*evt, uint16_t	*addrValue, uint8_t activeConnectionsNum, ConnProperties *connProperties);
+void		boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_packet	*evt, uint8_t activeConnectionsNum);
+void		connection_open_handler(ConnState *connState,  struct gecko_cmd_packet	*evt, uint16_t	*addrValue, uint8_t activeConnectionsNum, ConnProperties *connProperties);
+void		dfu_handler(uint8_t	bootToDfu, struct gecko_cmd_packet	*evt, uint8_t *activeConnectionsNum, ConnProperties  *connProperties);
+void		charecteristic_handler(char *DBG_BUF, uint8_t *charValue, struct gecko_cmd_packet	*evt, uint8_t tableIndex, uint8_t *i, ConnProperties  *connProperties);
 
 #endif /* MANDATORY_INCLUDES_H_ */

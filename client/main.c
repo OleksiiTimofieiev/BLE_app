@@ -21,9 +21,9 @@ int    main(void)
 {
 	uint8_t		i;
 	bool		printHeader = true;
-	uint8_t		*charValue;
+	uint8_t		*charValue = 0;
 	uint16_t	addrValue;
-	uint8_t		tableIndex;
+	uint8_t		tableIndex = 0;
 
 	init(&activeConnectionsNum, connProperties, &mac_address);
 	initConnectionProperties(&activeConnectionsNum, connProperties);
@@ -44,40 +44,18 @@ int    main(void)
 //				// Parse advertisement packets
 //				if (evt->data.evt_le_gap_scan_response.packet_type == 0) {}
 //				break;
-			// This event is generated when a new connection is established
+				// This event is generated when a new connection is established
 			case gecko_evt_le_connection_opened_id:
 				connection_open_handler(&connState,  evt, &addrValue, activeConnectionsNum, connProperties);
 				break;
-
-			// This event is generated when a connection is dropped
+				// This event is generated when a connection is dropped
 			case gecko_evt_le_connection_closed_id:
-				// Check if need to boot to dfu mode
-				if (bootToDfu) {
-					// Enter to DFU OTA mode
-					gecko_cmd_system_reset(2);
-				} else {
-					// remove connection from active connections
-					removeConnection(evt->data.evt_le_connection_closed.connection, &activeConnectionsNum, connProperties);
-					// start scanning again to find new devices
-			 //   gecko_cmd_le_gap_start_discovery(le_gap_phy_1m, le_gap_discover_generic);
-			 //   connState = scanning;
-				}
+				dfu_handler(bootToDfu, evt, &activeConnectionsNum, connProperties);
 				break;
-
-			// This event is generated when a characteristic value was received e.g. an indication
+				// This event is generated when a characteristic value was received e.g. an indication
 			case gecko_evt_gatt_characteristic_value_id:
-				charValue = &(evt->data.evt_gatt_characteristic_value.value.data[0]);
-		//    tableIndex = findIndexByConnectionHandle(evt->data.evt_gatt_characteristic_value.connection);
-
-					connProperties[tableIndex].temperature = (charValue[1] << 0) + (charValue[2] << 8) + (charValue[3] << 16);
-					sprintf(DBG_BUF, "%2lu.%02lu",    (connProperties[i].temperature / 1000), ((connProperties[i].temperature / 10) % 100));
-
-				// Send confirmation for the indication
-				gecko_cmd_gatt_send_characteristic_confirmation(evt->data.evt_gatt_characteristic_value.connection);
-				// Trigger RSSI measurement on the connection
-				gecko_cmd_le_connection_get_rssi(evt->data.evt_gatt_characteristic_value.connection);
+				charecteristic_handler(DBG_BUF, charValue, evt, tableIndex, &i, connProperties);
 				break;
-
 			// This event is generated when RSSI value was measured
 			case gecko_evt_le_connection_rssi_id:
 				tableIndex = findIndexByConnectionHandle(evt->data.evt_le_connection_rssi.connection, activeConnectionsNum, connProperties);
