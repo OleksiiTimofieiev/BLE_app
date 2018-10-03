@@ -1,6 +1,6 @@
 #include "./mandatory_includes.h"
 
-void initProperties(int8_t *activeConnectionsNum, ConnProperties *connProperties)
+void initProperties(uint8_t *activeConnectionsNum, ConnProperties *connProperties)
 {
   uint8_t i;
   *activeConnectionsNum = 0;
@@ -51,8 +51,8 @@ uint8_t findIndexByConnectionHandle(uint8_t connection, uint8_t activeConnection
 // Add a new connection to the connection_properties array
 void addConnection(uint8_t connection, uint16_t address, ConnProperties *connProperties, uint8_t *activeConnectionsNum)
 {
-  connProperties[activeConnectionsNum].connectionHandle = connection;
-  connProperties[activeConnectionsNum].serverAddress    = address;
+  connProperties[(*activeConnectionsNum)].connectionHandle = connection;
+  connProperties[(*activeConnectionsNum)].serverAddress    = address;
   (*activeConnectionsNum)++;
 }
 
@@ -60,7 +60,7 @@ void addConnection(uint8_t connection, uint16_t address, ConnProperties *connPro
 void removeConnection(uint8_t connection, uint8_t *activeConnectionsNum, ConnProperties *connProperties)
 {
   uint8_t i;
-  uint8_t table_index = findIndexByConnectionHandle(connection);
+  uint8_t table_index = findIndexByConnectionHandle(connection, *activeConnectionsNum, connProperties);
 
   if (activeConnectionsNum > 0) {
     (*activeConnectionsNum)--;

@@ -32,7 +32,7 @@ void main(void)
   // Initialize application
   initApp();
   // Initialize connection properties
-  initProperties();
+  initProperties(&activeConnectionsNum, connProperties);
   // Initialise serial interface
   RETARGET_SerialInit();
   // Initialize stack
@@ -91,7 +91,7 @@ void main(void)
         addrValue = (uint16_t)(evt->data.evt_le_connection_opened.address.addr[1] << 8) \
                     + evt->data.evt_le_connection_opened.address.addr[0];
         // Add connection to the connection_properties array
-        addConnection(evt->data.evt_le_connection_opened.connection, addrValue);
+        addConnection(evt->data.evt_le_connection_opened.connection, addrValue, connProperties, activeConnectionsNum);
         // Discover Health Thermometer service on the slave device
      /*   gecko_cmd_gatt_discover_primary_services_by_uuid(evt->data.evt_le_connection_opened.connection,
                                                          2,
@@ -114,7 +114,7 @@ void main(void)
           gecko_cmd_system_reset(2);
         } else {
           // remove connection from active connections
-          removeConnection(evt->data.evt_le_connection_closed.connection);
+          removeConnection(evt->data.evt_le_connection_closed.connection, &activeConnectionsNum, connProperties);
           // start scanning again to find new devices
        //   gecko_cmd_le_gap_start_discovery(le_gap_phy_1m, le_gap_discover_generic);
        //   connState = scanning;
@@ -137,7 +137,7 @@ void main(void)
 
       // This event is generated when RSSI value was measured
       case gecko_evt_le_connection_rssi_id:
-        tableIndex = findIndexByConnectionHandle(evt->data.evt_le_connection_rssi.connection);
+        tableIndex = findIndexByConnectionHandle(evt->data.evt_le_connection_rssi.connection, activeConnectionsNum, connProperties);
         if (tableIndex != TABLE_INDEX_INVALID) {
           connProperties[tableIndex].rssi = evt->data.evt_le_connection_rssi.rssi;
         }
