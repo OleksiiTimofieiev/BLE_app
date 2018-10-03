@@ -1,6 +1,27 @@
 #include "./mandatory_includes.h"
 
-void initProperties(uint8_t *activeConnectionsNum, ConnProperties *connProperties)
+void 	init(uint8_t *activeConnectionsNum, ConnProperties *connProperties, bd_addr *mac_address)
+{
+	// Initialize device
+	initMcu();
+	// Initialize board
+	initBoard();
+	// Initialize application
+	initApp();
+	// Initialise serial interface
+	RETARGET_SerialInit();
+	// Initialize stack
+	gecko_init(&config);
+	// Initialize mac_address
+	mac_address->addr[0] = 0xAD;
+	mac_address->addr[1] = 0x2F;
+	mac_address->addr[2] = 0x0C;
+	mac_address->addr[3] = 0x57;
+	mac_address->addr[4] = 0x0B;
+	mac_address->addr[5] = 0x00;
+}
+
+void initConnectionProperties(uint8_t *activeConnectionsNum, ConnProperties *connProperties)
 {
   uint8_t i;
   *activeConnectionsNum = 0;

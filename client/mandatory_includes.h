@@ -115,10 +115,11 @@ typedef struct {
   uint32_t temperature;
 } ConnProperties;
 
-void		initProperties(uint8_t *activeConnectionsNum, ConnProperties *connProperties);
+void		init(uint8_t *activeConnectionsNum, ConnProperties *connProperties, bd_addr *mac_address);
+void		initConnectionProperties(uint8_t *activeConnectionsNum, ConnProperties *connProperties);
 uint8_t		findServiceInAdvertisement(uint8_t *data, uint8_t len, uint8_t thermoService[2]);
-uint8_t findIndexByConnectionHandle(uint8_t connection, uint8_t activeConnectionsNum, ConnProperties *connProperties);
-void addConnection(uint8_t connection, uint16_t address, ConnProperties *connProperties, uint8_t *activeConnectionsNum);
-void removeConnection(uint8_t connection, uint8_t *activeConnectionsNum, ConnProperties *connProperties);
+uint8_t		findIndexByConnectionHandle(uint8_t connection, uint8_t activeConnectionsNum, ConnProperties *connProperties);
+void		addConnection(uint8_t connection, uint16_t address, ConnProperties *connProperties, uint8_t *activeConnectionsNum);
+void		removeConnection(uint8_t connection, uint8_t *activeConnectionsNum, ConnProperties *connProperties);
 
 #endif /* MANDATORY_INCLUDES_H_ */
