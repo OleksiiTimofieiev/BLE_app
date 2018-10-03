@@ -123,5 +123,6 @@ void		addConnection(uint8_t connection, uint16_t address, ConnProperties *connPr
 void		removeConnection(uint8_t connection, uint8_t *activeConnectionsNum, ConnProperties *connProperties);
 
 void	boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_packet	*evt, uint8_t activeConnectionsNum);
+void	connection_open_handler(ConnState *connState,  struct gecko_cmd_packet	*evt, uint16_t	*addrValue, uint8_t activeConnectionsNum, ConnProperties *connProperties);
 
 #endif /* MANDATORY_INCLUDES_H_ */

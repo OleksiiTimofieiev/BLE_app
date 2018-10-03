@@ -18,3 +18,20 @@ void	boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_pa
 	//   gecko_cmd_le_gap_start_discovery(le_gap_phy_1m, le_gap_discover_generic);
 	*connState = opening;
 }
+
+void	connection_open_handler(ConnState *connState,  struct gecko_cmd_packet	*evt, uint16_t	*addrValue, uint8_t activeConnectionsNum, ConnProperties *connProperties)
+{
+	// Get last two bytes of sender address
+	*addrValue = (uint16_t)(evt->data.evt_le_connection_opened.address.addr[1] << 8) + evt->data.evt_le_connection_opened.address.addr[0];
+	// Add connection to the connection_properties array
+	addConnection(evt->data.evt_le_connection_opened.connection, *addrValue, connProperties, &activeConnectionsNum);
+	// Discover Health Thermometer service on the slave device
+	/*   gecko_cmd_gatt_discover_primary_services_by_uuid(evt->data.evt_le_connection_opened.connection, 2, (const uint8_t*)thermoService);*/
+	connProperties[0].thermometerCharacteristicHandle=15;
+	// connState = discoverServices;
+	gecko_cmd_gatt_set_characteristic_notification(evt->data.evt_le_connection_opened.connection,
+													connProperties[0].thermometerCharacteristicHandle,
+													gatt_indication);
+	*connState = enableIndication;
+}
+

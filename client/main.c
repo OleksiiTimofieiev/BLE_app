@@ -28,44 +28,26 @@ int    main(void)
 	init(&activeConnectionsNum, connProperties, &mac_address);
 	initConnectionProperties(&activeConnectionsNum, connProperties);
 
-	while (1) {
-		struct gecko_cmd_packet* evt;
+	while (1)
+	{
+		struct gecko_cmd_packet	*evt;
 		// Always flush the UART buffer before letting the device go to sleep
 		RETARGET_SerialFlush();
-		// Check for stack event
+
 		evt = gecko_wait_event();
-		// Handle stack events
+
 		switch (BGLIB_MSG_ID(evt->header)) {
-			// This boot event is generated when the system boots up after reset
 			case gecko_evt_system_boot_id:
 				boot_handler(&connState, mac_address, evt, activeConnectionsNum);
 				break;
-
-			// This event is generated when an advertisement packet or a scan response
-			// is received from a slave
-			case gecko_evt_le_gap_scan_response_id:
-				// Parse advertisement packets
-				if (evt->data.evt_le_gap_scan_response.packet_type == 0) {
-
-						}
-				break;
+//			case gecko_evt_le_gap_scan_response_id:
+//				// Parse advertisement packets
+//				if (evt->data.evt_le_gap_scan_response.packet_type == 0) {}
+//				break;
 			// This event is generated when a new connection is established
 			case gecko_evt_le_connection_opened_id:
-				// Get last two bytes of sender address
-				addrValue = (uint16_t)(evt->data.evt_le_connection_opened.address.addr[1] << 8) + evt->data.evt_le_connection_opened.address.addr[0];
-				// Add connection to the connection_properties array
-				addConnection(evt->data.evt_le_connection_opened.connection, addrValue, connProperties, &activeConnectionsNum);
-				// Discover Health Thermometer service on the slave device
-		 /*   gecko_cmd_gatt_discover_primary_services_by_uuid(evt->data.evt_le_connection_opened.connection, 2, (const uint8_t*)thermoService);*/
-				connProperties[0].thermometerCharacteristicHandle=15;
-//        connState = discoverServices;
-				gecko_cmd_gatt_set_characteristic_notification(evt->data.evt_le_connection_opened.connection,
-																																 connProperties[0].thermometerCharacteristicHandle,
-																																 gatt_indication);
-				connState = enableIndication;
+				connection_open_handler(&connState,  evt, &addrValue, activeConnectionsNum, connProperties);
 				break;
-
-			// This event is generated when a new service is discovered
 
 			// This event is generated when a connection is dropped
 			case gecko_evt_le_connection_closed_id:
@@ -148,6 +130,3 @@ int    main(void)
 	}
 	return (1);
 }
-
-/** @} (end addtogroup app) */
-/** @} (end addtogroup Application) */
