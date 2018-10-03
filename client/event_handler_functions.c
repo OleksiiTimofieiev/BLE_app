@@ -54,7 +54,7 @@ void	dfu_handler(uint8_t	bootToDfu, struct gecko_cmd_packet	*evt, uint8_t *activ
 
 }
 
-void	charecteristic_handler(char *DBG_BUF, uint8_t		*charValue, struct gecko_cmd_packet	*evt, uint8_t		tableIndex, uint8_t		*i, ConnProperties  *connProperties)
+void	charecteristic_handler(char *DBG_BUF, uint8_t *charValue, struct gecko_cmd_packet *evt, uint8_t	tableIndex, uint8_t	*i, ConnProperties  *connProperties)
 {
 	charValue = &(evt->data.evt_gatt_characteristic_value.value.data[0]);
 	//    tableIndex = findIndexByConnectionHandle(evt->data.evt_gatt_characteristic_value.connection);
@@ -64,4 +64,54 @@ void	charecteristic_handler(char *DBG_BUF, uint8_t		*charValue, struct gecko_cmd
 	gecko_cmd_gatt_send_characteristic_confirmation(evt->data.evt_gatt_characteristic_value.connection);
 	// Trigger RSSI measurement on the connection
 	gecko_cmd_le_connection_get_rssi(evt->data.evt_gatt_characteristic_value.connection);
+}
+
+void	handle_RSSI(uint8_t	*tableIndex, struct gecko_cmd_packet *evt, ConnProperties  *connProperties, uint8_t *activeConnectionsNum)
+{
+	*tableIndex = findIndexByConnectionHandle(evt->data.evt_le_connection_rssi.connection, *activeConnectionsNum, connProperties);
+	if (*tableIndex != TABLE_INDEX_INVALID) {
+		connProperties[*tableIndex].rssi = evt->data.evt_le_connection_rssi.rssi;
+	}
+	// Trigger printing
+	gecko_external_signal(EXT_SIGNAL_PRINT_RESULTS);
+}
+
+void	external_signal_handler(struct gecko_cmd_packet *evt, bool	*printHeader, uint8_t *i, ConnProperties  *connProperties)
+{
+	if (evt->data.evt_system_external_signal.extsignals & EXT_SIGNAL_PRINT_RESULTS)
+	{
+		if (true == *printHeader)
+		{
+			*printHeader = false;
+			//printf("ADDR  TEMP   RSSI |ADDR  TEMP   RSSI |ADDR  TEMP   RSSI |ADDR  TEMP   RSSI |\r\n");
+		}
+		for (*i = 0u; *i < MAX_CONNECTIONS; i++)
+		{
+			if ((TEMP_INVALID != connProperties[*i].temperature) && (RSSI_INVALID != connProperties[*i].rssi) ) {
+				//printf("%04x ", connProperties[i].serverAddress);
+				//printf("%2lu.%02lu",
+						//   (connProperties[i].temperature / 1000),
+					 //    ((connProperties[i].temperature / 10) % 100));
+				//printf("C ");
+				//printf("% 3d", connProperties[i].rssi);
+				//printf("dBm|");
+			} else {
+				//printf("---- ------ ------|");
+			}
+	}
+	//printf("\r");
+}
+}
+
+void	server_user_write_request_handle(struct gecko_cmd_packet *evt, uint8_t *bootToDfu)
+{
+	if (evt->data.evt_gatt_server_user_write_request.characteristic == gattdb_ota_control)
+	{
+		// Set flag to enter to OTA mode
+		*bootToDfu = 1;
+		// Send response to Write Request
+		gecko_cmd_gatt_server_send_user_write_response(evt->data.evt_gatt_server_user_write_request.connection, gattdb_ota_control, bg_err_success);
+		// Close connection to enter to DFU OTA mode
+		gecko_cmd_le_connection_close(evt->data.evt_gatt_server_user_write_request.connection);
+	}
 }

@@ -126,5 +126,8 @@ void		boot_handler(ConnState *connState, bd_addr mac_address, struct gecko_cmd_p
 void		connection_open_handler(ConnState *connState,  struct gecko_cmd_packet	*evt, uint16_t	*addrValue, uint8_t activeConnectionsNum, ConnProperties *connProperties);
 void		dfu_handler(uint8_t	bootToDfu, struct gecko_cmd_packet	*evt, uint8_t *activeConnectionsNum, ConnProperties  *connProperties);
 void		charecteristic_handler(char *DBG_BUF, uint8_t *charValue, struct gecko_cmd_packet	*evt, uint8_t tableIndex, uint8_t *i, ConnProperties  *connProperties);
+void		handle_RSSI(uint8_t	*tableIndex, struct gecko_cmd_packet *evt, ConnProperties  *connProperties, uint8_t *activeConnectionsNum);
+void		external_signal_handler(struct gecko_cmd_packet *evt, bool	*printHeader, uint8_t *i, ConnProperties  *connProperties);
+void		server_user_write_request_handle(struct gecko_cmd_packet *evt, uint8_t *bootToDfu);
 
 #endif /* MANDATORY_INCLUDES_H_ */
