@@ -262,7 +262,17 @@
 		<project id="client.com.silabs.ss.framework.ide.project.core.cdt.cdtMbsProjectType.1054032694" name="SLS CDT Project" projectType="com.silabs.ss.framework.ide.project.core.cdt.cdtMbsProjectType"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="GNU ARM v4.9.3 - Default">
+			<resource resourceType="PROJECT" workspacePath="/client"/>
+		</configuration>
+		<configuration configurationName="GNU ARM v4.9.3 - Default - BGM111A256V2">
+			<resource resourceType="PROJECT" workspacePath="/client"/>
+		</configuration>
+		<configuration configurationName="GNU ARM v7.2.1 - Default">
+			<resource resourceType="PROJECT" workspacePath="/client"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="com.silabs.ss.framework.project.toolchain.core.default#com.silabs.ss.tool.ide.arm.toolchain.gnu.cdt:4.9.3.20150529;com.silabs.ss.framework.project.toolchain.core.default#com.silabs.ss.tool.ide.arm.toolchain.gnu.cdt:4.9.3.20150529.;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.base.9917891;com.silabs.ide.si32.gcc.cdt.managedbuild.tool.gnu.c.compiler.input.76688982">
